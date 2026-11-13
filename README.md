@@ -6,6 +6,10 @@
 > Это не Telegram и не связано с Telegram FZ-LLC. Логотип Telegram не используется.
 > Код распространяется по GPL-2.0, как и исходный проект.
 
+![Pixel Light и Pixel Dark](screenshots/preview.png)
+
+<p align="center"><img src="screenshots/icon.png" width="96" alt="Иконка"></p>
+
 ## Что внутри
 
 - палитра Material 3 для светлой и тёмной темы: белые/графитовые поверхности,
@@ -81,16 +85,14 @@ APK: `TMessagesProj_App/build/outputs/apk/afat/release/app.apk`.
 
 Исходники PixelGram обязаны оставаться открытыми: это требование GPL-2.0.
 
-## Как загрузить папку на GitHub
+## Как загрузить на GitHub
 
-В терминале (Linux внутри MargyCode или на компьютере):
+Папка уже готова: внутри лежит git-репозиторий с одним коммитом на ветке `main`
+(сам Forkgram подключён отдельным remote `upstream`, чтобы потом можно было брать
+его обновления). Остаётся создать пустой репозиторий `PixelGram` (public) и выполнить:
 
 ```bash
 cd /storage/emulated/0/PixelGram
-git init
-git add .
-git commit -m "PixelGram: Material You fork of Forkgram"
-git branch -M main
 git remote add origin https://github.com/ВАШ_ЛОГИН/PixelGram.git
 git push -u origin main
 ```
@@ -100,8 +102,20 @@ GitHub попросит логин и пароль: вместо пароля в
 (GitHub → Settings → Developer settings → Tokens (classic)).
 После загрузки токен можно отозвать.
 
-Потом: **Actions → Build PixelGram → Run workflow**. Первая сборка идёт
-дольше обычного, потому что собираются нативные библиотеки.
+Если папку скопировали без `.git`, создайте историю заново:
+
+```bash
+cd PixelGram
+git init -b main
+git add .
+git commit -m "PixelGram"
+git remote add origin https://github.com/ВАШ_ЛОГИН/PixelGram.git
+git push -u origin main
+```
+
+После загрузки сборка запускается сама на каждый push в `main`.
+Первая сборка идёт дольше обычного: собираются нативные библиотеки
+и Rust-часть, обычно 40–70 минут.
 
 ## Что дальше можно добавить
 
