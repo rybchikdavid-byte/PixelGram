@@ -23,6 +23,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -542,7 +543,59 @@ public class ForkSettingsActivity extends BaseFragment {
         return true;
     }
 
+    public static String getCustomTitle() {
+        String value = MessagesController.getGlobalMainSettings().getString("forkCustomTitle", "PixelGram");
+        return "Fork Client".equals(value) ? "PixelGram" : value;
+    }
+
+    private View createHeaderView(Context context) {
+        FrameLayout card = new FrameLayout(context);
+        card.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+
+        LinearLayout row = new LinearLayout(context);
+        row.setOrientation(LinearLayout.HORIZONTAL);
+        row.setGravity(Gravity.CENTER_VERTICAL);
+        row.setPadding(AndroidUtilities.dp(21), AndroidUtilities.dp(18), AndroidUtilities.dp(21), AndroidUtilities.dp(18));
+        card.addView(row, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
+
+        ImageView logo = new ImageView(context);
+        logo.setImageResource(R.drawable.pixelgram_settings);
+        logo.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        row.addView(logo, LayoutHelper.createLinear(56, 56));
+
+        LinearLayout texts = new LinearLayout(context);
+        texts.setOrientation(LinearLayout.VERTICAL);
+        row.addView(texts, LayoutHelper.createLinear(0, LayoutHelper.WRAP_CONTENT, 1f, 16, 0, 0, 0));
+
+        TextView title = new TextView(context);
+        title.setText("PixelGram");
+        title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
+        title.setTypeface(AndroidUtilities.bold());
+        title.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+        texts.addView(title, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT));
+
+        TextView subtitle = new TextView(context);
+        subtitle.setText(LocaleController.getString(R.string.PixelGramHeaderSubtitle));
+        subtitle.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 13);
+        subtitle.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText));
+        subtitle.setPadding(0, AndroidUtilities.dp(2), 0, 0);
+        texts.addView(subtitle, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT));
+
+        TextView version = new TextView(context);
+        version.setText("v" + BuildVars.BUILD_VERSION_STRING);
+        version.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
+        version.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText));
+        version.setPadding(0, AndroidUtilities.dp(2), 0, 0);
+        texts.addView(version, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT));
+
+        return card;
+    }
+
     private void fillSettings(ArrayList<UItem> items) {
+        if (!isSearching()) {
+            items.add(UItem.asCustom(createHeaderView(getContext())));
+            items.add(UItem.asShadow(null));
+        }
         items.add(UItem.asHeader(LocaleController.getString(R.string.PrivacySettings)));
         if (!SharedConfig.isUserOwner()) {
             items.add(UItem.asButtonCheck(ID_HIDE_SENSITIVE_DATA, LocaleController.getString(R.string.HideSensitiveData), LocaleController.getString(R.string.ForkRestartRequired))
@@ -577,7 +630,7 @@ public class ForkSettingsActivity extends BaseFragment {
             items.add(UItem.asButtonCheck(ID_HIDE_BOTTOM_BUTTON, LocaleController.getString(R.string.HideBottomButton), LocaleController.getString(R.string.HideBottomButtonInfo))
                 .setChecked(pref("hideBottomButton", false)).setMultiline(true));
         }
-        items.add(UItem.asSettingsCell(ID_CUSTOM_TITLE, LocaleController.getString(R.string.EditAdminRank), prefs().getString("forkCustomTitle", "Fork Client")));
+        items.add(UItem.asSettingsCell(ID_CUSTOM_TITLE, LocaleController.getString(R.string.EditAdminRank), getCustomTitle()));
         items.add(UItem.asShadow(null));
 
         items.add(UItem.asHeader(LocaleController.getString(R.string.AvatarShape)));
@@ -1229,11 +1282,11 @@ public class ForkSettingsActivity extends BaseFragment {
     }
 
     private void showCustomTitleDialog(View view) {
-        final String defaultValue = "Fork Client";
+        final String defaultValue = "PixelGram";
         org.telegram.messenger.forkgram.ForkDialogs.createFieldAlert(
             getContext(),
             LocaleController.getString(R.string.EditAdminRank),
-            prefs().getString("forkCustomTitle", defaultValue),
+            getCustomTitle(),
             (result) -> {
                 if (result.isEmpty()) {
                     result = defaultValue;

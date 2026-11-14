@@ -72,6 +72,7 @@
     <string name="CopyWithoutProtocol">Copy without protocol</string>
     <!--fork settings view-->
     <string name="ForkSettingsTitle">PixelGram Settings</string>
+    <string name="PixelGramHeaderSubtitle">Forkgram base • Material You • Plugins</string>
     <string name="ForkCheckUpdate">Check updates</string>
     <string name="InAppCamera">Enable In-App Camera</string>
     <string name="InAppCameraInfo">In Attachments</string>

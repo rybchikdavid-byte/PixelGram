@@ -165,6 +165,7 @@
     <string name="CopyWithoutProtocol">Копировать без протокола</string>
     <!--fork settings view-->
     <string name="ForkSettingsTitle">Настройки PixelGram</string>
+    <string name="PixelGramHeaderSubtitle">На базе Forkgram • Material You • Плагины</string>
     <string name="ForkCheckUpdate">Проверить обновления</string>
     <string name="SquareAvatars">Квадратные аватары</string>
     <string name="AvatarShape">Форма аватара</string>
